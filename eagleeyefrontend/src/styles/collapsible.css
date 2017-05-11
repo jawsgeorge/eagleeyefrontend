@@ -1,0 +1,113 @@
+
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nobile', sans-serif;
+}
+
+.demo-container {
+  /*padding: 40px;
+  width: 100%;*/
+}
+
+.demo-container h1 {
+  /*border-bottom: 1px solid #ccc;*/
+  /*color: #03a9f4;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  text-align: center;*/
+}
+
+.demo-container h2 {
+  /*color: #ccc;*/
+}
+
+.react-sanfona {
+  /*border: px solid #ccc;*/
+  /*border-radius: 3px;*/
+
+
+
+}
+
+.react-sanfona-item-title {
+  background-color: #fafafa;
+  /*border-top: 0px solid #ccc;*/
+  /*color: #333;*/
+  color:#d6d6d6;
+  padding: 7px;
+  text-transform: uppercase;
+  transition: background-color .3s;
+  /*border-radius: 50px;*/
+
+
+
+
+}
+
+.react-sanfona-item  .react-sanfona-item-title {
+
+  background-color: #565758;
+   margin-top: 13px !important;
+   height: 25px;
+   font-size: 12px;
+   font-weight: 600;
+   align-items: center;
+   background-image: url("../Assets/DD_DownArrow.png") !important;
+   background-repeat: no-repeat;
+   background-position: 99%;
+
+}
+
+
+.react-sanfona-item-expanded .react-sanfona-item-title {
+  background-color: #ffd325;
+  color: #4b4b4b;
+
+  background-image: url("../Assets/DD_UPArrow.png.png") !important;
+  background-repeat: no-repeat;
+  background-position: 99%;
+
+}
+
+.react-sanfona-item-body{
+height:auto;
+margin-bottom: 1px;
+
+}
+
+.react-sanfona-item-body-wrapper {
+  height:auto;
+  color: #666;
+  /*padding-top: 5px;*/
+  position: relative;
+}
+
+.react-sanfona-item-body-wrapper:hover .tooltip {
+  opacity: 1;
+}
+
+.react-sanfona-item img {
+  display: block;
+  max-width: 100%;
+}
+
+.tooltip {
+  background-color: #000;
+  bottom: -10px;
+  border-radius: 3px;
+  color: #fff;
+  left: 10px;
+  opacity: 0;
+  padding: 10px;
+  position: absolute;
+  transition: opacity .3s;
+}
+
+.react-sanfona-item{
+margin: auto;
+width: 100%;
+}
