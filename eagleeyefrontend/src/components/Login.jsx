@@ -2,25 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Form, FormGroup, FormControl, Col, ControlLabel,Button,InputGroup,Glyphicon} from 'react-bootstrap';
 import {Grid,Row,select, DropdownButton,NavbarHeader,NavbarBrand,NavDropdown,MenuItem} from 'react-bootstrap';
-
-var arr  = [ {
-   
-   'fname' : "Barath",
-   'lname' : "Ravi",
-   'mobno' : "9994477309",
-   'loc' : "Banglore",
-},{
-    'fname' : "Vignesh",
-   'lname' : "Thiraviam",
-   'mobno' : "999776690",
-   'loc' : "Chennai",
-},{
-  'fname' : "MS",
-   'lname' : "Dhoni",
-   'mobno' : "999776690",
-   'loc' : "Chennai",
-}]
-
+import axios from 'axios';
 let Login = React.createClass({
     
     getInitialState: function() {
@@ -31,11 +13,12 @@ let Login = React.createClass({
    }
   },
     contextTypes : {
-    router: React.PropTypes.object
+    router: React.PropTypes.object,
+    loginURL : React.PropTypes.string,
+    getAllRoles : React.PropTypes.string
   },
-  
   componentWillMount() {
-     localStorage.setItem("lisData",JSON.stringify(arr)) 
+     
   },
   
   changeName : function(e){
@@ -51,6 +34,7 @@ let Login = React.createClass({
     validateUser : function() {
       let name = this.state.userName;
       let pwd = this.state.password;
+      let that = this;
       if(name == null || name == "null" || name == undefined || name.trim()  == "" ){
         alert("Please enter the username");
       }
@@ -58,10 +42,48 @@ let Login = React.createClass({
         alert("Please enter the password");
       }
       else{
-        //code needs to added for server authentication
-          this.context.router.push('/homePage');
+        // code needs to added for server authentication
+        let myObj = {
+          userName : name,
+          password : pwd
+        }
+        console.log("THe url which is coming here ", this.context)
+        this.context.router.push('/homePage');
+          axios.post(this.context.loginURL,myObj).then(function(response){
+            // push to next page
+            console.log("The response received is ",response);
+            let receivedResponse = response.data.responseCode;
+            console.log("THe received response is ",receivedResponse);
+            if(receivedResponse == "200"){
+              // console.log("THis is coming here")
+              that.context.router.push({
+                pathname : '/homePage',
+                state : {
+                  MenuArr : response.data.object
+                }
+              })
+              // this.context.router.push('/homePage');
+            }
+            else{
+              alert("Please try with valid credentials");
+              that.setState({
+                userName:'',
+                password:'',
+      
+              })
+            }
+          }).catch(function(error){
+            // show error details 
+          });
+          // this.context.router.push('/homePage');
       }
     },
+    redirectToChangePassword : function(e){
+      e.preventDefault();
+      // console.log("Its reaching here");
+      this.context.router.push('/forgotPasssword');  
+    },
+    
     render : function(){
         return(
             <div id="loginPage">
@@ -99,7 +121,7 @@ let Login = React.createClass({
                      <Row className="show-grid alignLoginFields textAlignCenter">
                              <Col md ={5} sm={5} xs={5}></Col>
                              <Col md={1} className="loginFieldsPositioning zeroPadding">
-                               <a href="" className="loginDetailsColor ">Forgot Password</a>
+                               <a href="" className="loginDetailsColor " onClick={this.redirectToChangePassword}>Forgot Password</a>
                              </Col>
                        </Row>
                  </Grid>

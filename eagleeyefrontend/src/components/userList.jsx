@@ -1,7 +1,9 @@
 import React from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-
-
+import GenericHeader from './GenericHeader.jsx'
+import axios from 'axios';
+import {grey100, blue500 ,lightGreen300,lightGreen100,darkWhite,teal700,tealA400} from 'material-ui/styles/colors';
+import ScrollArea from 'react-scrollbar';
 
 let UserListComponents = React.createClass({
 
@@ -11,68 +13,62 @@ contextTypes : {
 
      getInitialState: function() {
     return {
-         listArr : ["22","ww"]   ,
-         arr : JSON.parse(localStorage.getItem("lisData")) 
+         arr : []
        }
   },
   
-  componentWillMount() {
-   this.setState({
-       arr : JSON.parse(localStorage.getItem("lisData")) 
-   });   
-  },
-  
-    contextTypes : {
-    router: React.PropTypes.object
+  componentDidMount : function(){
+      let _this = this;
+    axios.get("http://localhost:8080/rest/eagleeye/getusers").then(function(response){
+        console.log("The server user list details are ",response.data);
+        _this.setState({arr: response.data});
+    }).catch(function(err){
+        _this.setState({
+            arr : []
+        })
+    });
   },
   adduser : function(){
-      this.context.router.push('/adduser');
+      this.context.router.push('/register');
   },
     render : function(){
-
+        console.log("THe arra after coing is ", this.state.arr)
         return (
-            <div>
-                <div className='addUserHeader' onClick={this.adduser}>
-                    List of Registered Users
-                    <img className="addicon" src='Assets/ddd.png'/>
-                    <span className='addText'>Add user</span>
-                </div>
-              { this.state.listArr.length > 1 ? 
-
-                <Table >
+            <ScrollArea>
+            <div className="roleconfigPage">
+            <GenericHeader buttonText="Add User" headerText="List of Users" goToUrl="register" backUrl="homePage" />
+                  <div  className="userListTable">
+                
+                <Table>
                     <TableHeader  displaySelectAll={false} adjustForCheckbox={false}>
-                    <TableRow>
+                    <TableRow style={{background :teal700,color : darkWhite }}>
                         <TableHeaderColumn></TableHeaderColumn>
-                        <TableHeaderColumn>Fisrt Name</TableHeaderColumn>
-                        <TableHeaderColumn>Email Id</TableHeaderColumn>
-                        <TableHeaderColumn>Mobile No</TableHeaderColumn>
-                        <TableHeaderColumn>Base Location</TableHeaderColumn>
+                        <TableHeaderColumn style={{color : "white"}}>User Name</TableHeaderColumn>
+                        <TableHeaderColumn style={{color : "white"}}>Email Id</TableHeaderColumn>
+                        <TableHeaderColumn style={{color : "white"}}>Role Name</TableHeaderColumn>
                     </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}  showRowHover={true} 
-                     stripedRows={true}>
+                     stripedRows={false} style={{background :tealA400 }} >
                      {this.state.arr.map( data => {
                          return (
                         <TableRow>
                         <TableRowColumn><img src='Assets/userdisplayicon.png' className="userDisplayWidth" /></TableRowColumn>
-                        <TableRowColumn>{data.fname}</TableRowColumn>
-                        <TableRowColumn>{data.lname}</TableRowColumn>
-                        <TableRowColumn>{data.mobno}</TableRowColumn>
+                        <TableRowColumn>{data.userName}</TableRowColumn>
+                        <TableRowColumn>{data.email}</TableRowColumn>
                         <TableRowColumn>
-                            <span>{data.loc}</span>
-                            <img className="deleteIconClass" src='Assets/Delete_Icon.png'/>
+                            <span>{data.role.description}</span>
+                            
                         </TableRowColumn>
                     </TableRow>
                          )
                      })}
-                    
                     </TableBody>
                 </Table>
-
-              : ""
-
-              }
+                
+                </div>
             </div>
+            </ScrollArea>
         )
     }
 
@@ -80,3 +76,4 @@ contextTypes : {
 
 
 export default UserListComponents;  
+//<img className="deleteIconClass" src='Assets/Delete_Icon.png'/>
